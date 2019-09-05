@@ -28,6 +28,7 @@ namespace BethanysPieShop
                      options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddTransient<IPieRepository, PieRepository>();
+            services.AddTransient<IFeedbackRepository, FeedbackRepository>();
             services.AddMvc();
         }
 
@@ -41,8 +42,15 @@ namespace BethanysPieShop
 
             //Allows return static file from wwwroot
             app.UseStaticFiles();
+            app.UseAuthentication();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}"
+                    );
+            });
 
         }
     }
